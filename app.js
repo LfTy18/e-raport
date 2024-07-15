@@ -3,11 +3,11 @@ const express = require('express');
 const connectDB = require('./config/db');
 
 const siswaRoutes = require('./routes/siswaRoutes');
-const guruRoutes = require('./routes/Guru');
-const mapelRoutes = require('./routes/Mapel');
-const kelasRoutes = require('./routes/Kelas');
+const guruRoutes = require('./routes/guruRoutes');
+const mapelRoutes = require('./routes/mapelRoutes');
+const kelasRoutes = require('./routes/kelasRoutes');
 const nilaiRoutes = require('./routes/nilaiRoutes');
-const absensiRoutes = require('./routes/Absensi');
+const absensiRoutes = require('./routes/absensiRoutes');
 
 const app = express();
 
