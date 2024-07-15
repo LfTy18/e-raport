@@ -20,6 +20,20 @@ exports.getAllSiswa = async (req, res) => {
     }
 };
 
+exports.updateSiswa = async (req, res) => {
+    const { nama, nis } = req.body;
+    try {
+        const siswa = await Guru.findByIdAndUpdate(req.params.id, { nama, nis }, { new: true });
+        if (!guru) {
+            return res.status(404).json({ message: "Siswa tidak ditemukan" });
+        }
+        res.status(200).json(siswa);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
 exports.getSiswaById = async (req, res) => {
     try {
         const siswa = await Siswa.findByIdAndUpdate(req.params.id, { nama, nis, kelas }, { new: true });

@@ -1,7 +1,7 @@
 const Nilai = require('../models/nilaiModels');
 const Absensi = require('../models/absensiModels');
 
-expoerts.createNilai = async (req, res) => {
+exports.createNilai = async (req, res) => {
     const { siswa, mapel, tugas, ulanganHarian, uts, uas } = req;
     try {
         //Menghitung nilai kehadiran dari tabel absensi

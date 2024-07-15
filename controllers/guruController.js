@@ -11,7 +11,7 @@ exports.createGuru = async (req, res) => {
     }
 };
 
-exports.getAllguru = async (req, res) => {
+exports.getAllGuru = async (req, res) => {
     try {
         const guru = await Guru.find();
         res.status(200).json(guru);

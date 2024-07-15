@@ -1,4 +1,4 @@
-const Kelas = require('../model/kelasModels');
+const Kelas = require('../models/kelasModels');
 
 exports.createKelas = async (req, res) => {
     const { nama, siswa } = req.body;
@@ -11,7 +11,7 @@ exports.createKelas = async (req, res) => {
     }
 };
 
-exports.getAllkelas = async (req, res) => {
+exports.getAllKelas = async (req, res) => {
     try {
         const kelas = await Kelas.find().populate('siswa');
         res.status(200).json(kelas);

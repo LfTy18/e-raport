@@ -32,6 +32,19 @@ exports.getAbsensiById = async (req, res) => {
     }
 };
 
+exports.updateAbsensi = async (req, res) => {
+    const { siswa, tanggal, statusKehadiran } = req.body;
+    try {
+        const absensi = await Absensi.findByIdAndUpdate(req.params.id, { siswa, tanggal, statusKehadiran }, { new: true });
+        if (!absensi) {
+            return res.status(404).json({ msg: 'Absensi not found' });
+        }
+        res.status(200).json(absensi);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 exports.deleteAbsensi = async (req, res) => {
     try {
         const absensi = await Absensi.findByIdAndDelete(req.params.id);
