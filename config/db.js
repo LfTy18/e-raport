@@ -1,15 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", false);
 
+// Connect DB
 const connectDB = async () => {
     try {
-        await mongoose.connect('mongodb://localhost:27017/e_raport', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        });
-        console.log('MongoDB Connected...');
+        const connect = await mongoose.connect(process.env.MONGODB_URI);
+        console.log(`Database Connected: ${connect.connection.host}`);
     } catch (error) {
-        console.error(error.message);
-        process.exit(1);
+        console.log(`Database no Connected!`, error);
     }
 };
 
