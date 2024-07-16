@@ -370,8 +370,8 @@ function loadNilai() {
 
 function addNilai(event) {
     event.preventDefault();
-    const siswaId = document.getElementById('siswaIdNilai').value;
-    const mapelId = document.getElementById('mapelIdNilai').value;
+    const siswa = document.getElementById('siswaNilai').value;
+    const mapel = document.getElementById('mapelNilai').value;
     const kehadiran = document.getElementById('kehadiranNilai').value;
     const tugas = document.getElementById('tugasNilai').value;
     const ulangan = document.getElementById('ulanganNilai').value;
@@ -383,7 +383,7 @@ function addNilai(event) {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ siswaId, mapelId, kehadiran, tugas, ulangan, uts, uas }),
+        body: JSON.stringify({ siswa, mapel, kehadiran, tugas, ulangan, uts, uas }),
     })
         .then(response => response.json())
         .then(data => {
@@ -410,3 +410,4 @@ function deleteNilai(id) {
             alert('Gagal menghapus nilai');
         });
 }
+
