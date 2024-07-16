@@ -11,7 +11,6 @@ const nilaiRoutes = require('./routes/nilaiRoutes');
 const absensiRoutes = require('./routes/absensiRoutes');
 
 const app = express();
-dotenv.config();
 
 // Init Middleware
 app.use(express.json());
