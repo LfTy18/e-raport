@@ -23,7 +23,7 @@ exports.getAllSiswa = async (req, res) => {
 exports.updateSiswa = async (req, res) => {
     const { nama, nis } = req.body;
     try {
-        const siswa = await Guru.findByIdAndUpdate(req.params.id, { nama, nis }, { new: true });
+        const siswa = await Siswa.findByIdAndUpdate(req.params.id, { nama, nis }, { new: true });
         if (!guru) {
             return res.status(404).json({ message: "Siswa tidak ditemukan" });
         }
