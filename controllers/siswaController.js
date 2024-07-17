@@ -14,7 +14,7 @@ exports.createSiswa = async (req, res) => {
 exports.getAllSiswa = async (req, res) => {
     try {
         const siswa = await Siswa.find().populate('kelas');
-        res.status(200).josn(siswa);
+        res.status(200).json(siswa);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
