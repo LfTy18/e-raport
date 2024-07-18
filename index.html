@@ -4,44 +4,131 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Raport</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
-    <script src="js/main.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
+    <script src="public/js/main.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">E-Raport</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="siswa-link">Siswa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="guru-link">Guru</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="mata-pelajaran-link">Mata Pelajaran</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="kelas-link">Kelas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="absensi-link">Absensi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" id="nilai-link">Nilai</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container mt-4" id="content">
-        <h1>Welcome to E-Raport</h1>
-        <p>Pilih menu di atas untuk mengelola data.</p>
-    </div>
-
+    <body class="hold-transition sidebar-mini">
+        <div class="wrapper">
+            <!-- Navbar -->
+            <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="homeLink">Home</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="siswaLink">Siswa</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="guruLink">Guru</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="mapelLink">Mata Pelajaran</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="kelasLink">Kelas</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="absensiLink">Absensi</a>
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
+                        <a href="#" class="nav-link" id="nilaiLink">Nilai</a>
+                    </li>
+                </ul>
+            </nav>
+            <!-- /.navbar -->
     
+            <!-- Main Sidebar Container -->
+            <aside class="main-sidebar sidebar-dark-primary elevation-4">
+                <a href="#" class="brand-link">
+                    <span class="brand-text font-weight-light">E-Raport</span>
+                </a>
+                <div class="sidebar">
+                    <nav class="mt-2">
+                        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="homeLink">
+                                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                                    <p>Home</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="siswaLink">
+                                    <i class="nav-icon fas fa-users"></i>
+                                    <p>Siswa</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="guruLink">
+                                    <i class="nav-icon fas fa-chalkboard-teacher"></i>
+                                    <p>Guru</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="mapelLink">
+                                    <i class="nav-icon fas fa-book"></i>
+                                    <p>Mata Pelajaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="kelasLink">
+                                    <i class="nav-icon fas fa-school"></i>
+                                    <p>Kelas</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="absensiLink">
+                                    <i class="nav-icon fas fa-check-circle"></i>
+                                    <p>Absensi</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link" id="nilaiLink">
+                                    <i class="nav-icon fas fa-graduation-cap"></i>
+                                    <p>Nilai</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="container mt-5">
+                <h1>Selamat Datang di E-Raport</h1>
+                
+                <!-- Tabel Siswa -->
+                <h2>Data Siswa</h2>
+                <button class="btn btn-primary" onclick="showAddSiswaForm()">Tambah Siswa</button>
+                <table class="table table-bordered" id="siswaTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nama</th>
+                            <th>Kelas</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       
+                    </tbody>
+                </table>
+    
+    
+            <footer class="main-footer">
+                <strong>Copyright &copy; 2024 <a href="#">E-Raport</a>.</strong>
+                All rights reserved.
+            </footer>
+        </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/js/adminlte.min.js"></script>
 </body>
 </html>

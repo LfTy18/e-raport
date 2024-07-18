@@ -30,6 +30,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+function loadSiswaData() {
+    fetch('http://localhost:3000/api/siswa')
+        .then(response => response.json())
+        .then(data => {
+            const siswaTable = document.getElementById('siswaTable').getElementsByTagName('tbody')[0];
+            siswaTable.innerHTML = '';
+            data.forEach(siswa => {
+                let row = siswaTable.insertRow();
+                row.insertCell(0).innerHTML = siswa.id;
+                row.insertCell(1).innerHTML = siswa.nama;
+                row.insertCell(2).innerHTML = siswa.kelas;
+                let actionCell = row.insertCell(3);
+                actionCell.innerHTML = `
+                    <button class="btn btn-warning" onclick="showEditSiswaForm(${siswa.id})">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteSiswa(${siswa.id})">Hapus</button>
+                `;
+            });
+        })
+        .catch(error => console.error('Error loading siswa data:', error));
+    }
+
+    function showAddSiswaForm() {
+        document.getElementById('dataForm').reset();
+        $('#dataForm').modal('show');
+    }
+    
+    function showEditSiswaForm(id) {
+        fetch(`http://localhost:3000/api/siswa/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('nama').value = data.nama;
+                document.getElementById('kelas').value = data.kelas;
+                $('#dataForm').modal('show');
+            })
+            .catch(error => console.error('Error loading siswa data:', error));
+    }
+    
+    function deleteSiswa(id) {
+        fetch(`http://localhost:3000/api/siswa/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (response.ok) {
+                loadSiswaData();
+            } else {
+                console.error('Error deleting siswa');
+            }
+        })
+        .catch(error => console.error('Error deleting siswa:', error));
+    }
+
 function fetchDataAndDisplay(url, type) {
     fetch(url)
         .then(response => response.json())
