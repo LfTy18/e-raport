@@ -52,9 +52,15 @@ function loadSiswaData() {
     }
 
     function showAddSiswaForm() {
-        document.getElementById('dataForm').reset();
-        $('#dataForm').modal('show');
+        const form = document.getElementById('dataForm');
+        if (form) {
+            form.reset();
+            $('#dataForm').form('show');
+        } else {
+            console.error('Form element not found');
+        }
     }
+    
     
     function showEditSiswaForm(id) {
         fetch(`http://localhost:3000/api/siswa/${id}`)
