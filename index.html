@@ -21,7 +21,7 @@
                         <a href="#" class="nav-link" id="homeLink">Home</a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
-                        <a href="#" class="nav-link" id="siswaLink">Siswa</a>
+                        <a href="#" class="navl-link" id="siswaLink">Siswa</a>
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
                         <a href="#" class="nav-link" id="guruLink">Guru</a>
@@ -103,22 +103,48 @@
                 <h1>Selamat Datang di E-Raport</h1>
                 
                 <!-- Tabel Siswa -->
-                <h2>Data Siswa</h2>
-                <button class="btn btn-primary" onclick="showAddSiswaForm()">Tambah Siswa</button>
-                <table class="table table-bordered" id="siswaTable">
+            <div class="container mt-4">
+                <h1>Data Siswa</h1>
+                <button class="btn btn-primary" onclick="createSiswa()">Tambah Siswa</button>
+                <table class="table mt-3">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Nama</th>
                             <th>Kelas</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                       
+                    <tbody id="siswaTableBody">
+                        <!-- Data siswa akan dimuat di sini -->
                     </tbody>
                 </table>
-    
+            </div>
+            
+            <div class="modal fade" id="dataFormModal" tabindex="-1" aria-labelledby="dataFormModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="dataFormModalLabel">Form Siswa</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="dataForm">
+                                <div class="form-group">
+                                    <label for="nama">Nama</label>
+                                    <input type="text" class="form-control" id="nama" name="nama" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="kelas">Kelas</label>
+                                    <input type="text" class="form-control" id="kelasId" name="kelasid" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>    
     
             <footer class="main-footer">
                 <strong>Copyright &copy; 2024 <a href="#">E-Raport</a>.</strong>
@@ -126,6 +152,8 @@
             </footer>
         </div>
 
+
+        
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.min.js"></script>

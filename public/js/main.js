@@ -1,4 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('homeLink').addEventListener('click', function(event) {
+        event.preventDefault();
+        window.location.href = 'index.html';
+    });
+    
     document.getElementById('siswaLink').addEventListener('click', function(event) {
         event.preventDefault();
         fetchDataAndDisplay('http://localhost:3000/api/siswa', 'siswa');
@@ -28,51 +33,80 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         fetchDataAndDisplay('http://localhost:3000/api/nilai', 'nilai');
     });
+    
+    document.getElementById('dataForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+                const id = event.target.dataset.id;
+                if (id){
+                    editSiswa();
+                } else {
+                    addSiswa();
+                }
 });
 
+})
+// CRUD Siswa
 function loadSiswaData() {
     fetch('http://localhost:3000/api/siswa')
         .then(response => response.json())
         .then(data => {
-            const siswaTable = document.getElementById('siswaTable').getElementsByTagName('tbody')[0];
-            siswaTable.innerHTML = '';
+            const siswaTableBody = document.getElementById('siswaTableBody');
+            siswaTableBody.innerHTML = '';
             data.forEach(siswa => {
-                let row = siswaTable.insertRow();
-                row.insertCell(0).innerHTML = siswa.id;
-                row.insertCell(1).innerHTML = siswa.nama;
-                row.insertCell(2).innerHTML = siswa.kelas;
-                let actionCell = row.insertCell(3);
-                actionCell.innerHTML = `
-                    <button class="btn btn-warning" onclick="showEditSiswaForm(${siswa.id})">Edit</button>
-                    <button class="btn btn-danger" onclick="deleteSiswa(${siswa.id})">Hapus</button>
-                `;
+                const row = `<tr>
+                <td>${siswa.nama}</td>
+                <td>${siswa.kelas}</td>
+                <td>
+                    <button class="btn btn-warning" onclick="showEditSiswaForm('${siswa._id}')">Edit</button>
+                    <button class="btn btn-danger" onclick="deleteSiswa('${siswa._id}')">Hapus</button>
+                </td>
+                </tr>`;
+                siswaTableBody.innerHTML += row;
             });
         })
         .catch(error => console.error('Error loading siswa data:', error));
-    }
+}
 
-    function showAddSiswaForm() {
-        const form = document.getElementById('dataForm');
-        if (form) {
-            form.reset();
-            $('#dataForm').form('show');
-        } else {
-            console.error('Form element not found');
-        }
-    }
+
+function createSiswa() {
+    const form = document.getElementById('dataForm');
+    const formData = new FormData(form);
+    const siswaData = {
+        nama: formData.get('nama'),
+        kelasid: formData.get('kelasId')
+    };
+
+    fetch('http://localhost:3000/api/siswa', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(siswaData)
+    })
+       .then(response => {
+            if (response.ok) {
+                loadSiswaData();
+                $('#dataForm').form('hide');
+            } else {
+                console.error('Error creating siswa');
+            }
+        })
+       .catch(error => console.error('Error creating siswa:', error));
+}
     
     
-    function showEditSiswaForm(id) {
-        fetch(`http://localhost:3000/api/siswa/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('nama').value = data.nama;
-                document.getElementById('kelas').value = data.kelas;
-                $('#dataForm').modal('show');
-            })
-            .catch(error => console.error('Error loading siswa data:', error));
-    }
-    
+function editSiswaForm(id) {
+    fetch(`http://localhost:3000/api/siswa/${id}`)
+        .then(response => response.json())
+        .then(data => {
+            const form = document.getElementById('dataForm');
+            form.nama.value = data.nama;
+            form.kelas.value = data.kelas;
+            form.dataset.id = id;
+            $('#dataFormModal').form('show');
+        })
+        .catch(error => console.error('Error loading siswa data:', error));
+}
     function deleteSiswa(id) {
         fetch(`http://localhost:3000/api/siswa/${id}`, {
             method: 'DELETE'
@@ -86,6 +120,8 @@ function loadSiswaData() {
         })
         .catch(error => console.error('Error deleting siswa:', error));
     }
+
+    loadSiswaData();
 
 function fetchDataAndDisplay(url, type) {
     fetch(url)
