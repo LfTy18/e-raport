@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Data Absensi</title>
+</head>
+<body>
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="index.html" class="nav-link" id="homeLink">Home</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="siswa.html" class="navl-link" id="siswaLink">Siswa</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="guru.html" class="nav-link" id="guruLink">Guru</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="mapel.html" class="nav-link" id="mapelLink">Mata Pelajaran</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="kelas.html" class="nav-link" id="kelasLink">Kelas</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="absensi.html" class="nav-link" id="absensiLink">Absensi</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="nilai.html" class="nav-link" id="nilaiLink">Nilai</a>
+            </li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <h1>Data Absensi</h1>
+        <button class="btn btn-primary" onclick="showAddAbsensiForm()">Tambah Absensi</button>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Siswa</th>
+                    <th>Tanggal</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="absensiTableBody">
+                <!-- Data Absensi akan dimuat di sini -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add/Edit Absensi Form -->
+    <div id="absensiFormModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="absensiFormTitle">Tambah Absensi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="absensiForm">
+                        <div class="form-group">
+                            <label for="absensiSiswa">Siswa</label>
+                            <input type="text" class="form-control" id="absensiSiswa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="absensiTanggal">Tanggal</label>
+                            <input type="date" class="form-control" id="absensiTanggal" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="absensiStatus">Status</label>
+                            <select class="form-control" id="absensiStatus" required>
+                                <option value="Hadir">Hadir</option>
+                                <option value="Izin">Izin</option>
+                                <option value="Sakit">Sakit</option>
+                                <option value="Alpa">Alpa</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            fetchAbsensi();
+
+            // Show Add Absensi Form
+            window.showAddAbsensiForm = function() {
+                $('#absensiFormTitle').text('Tambah Absensi');
+                $('#absensiForm')[0].reset();
+                $('#absensiFormModal').modal('show');
+            };
+
+            // Fetch All Absensi
+            function fetchAbsensi() {
+                $.get('http://localhost:3000/api/absensi', function(data) {
+                    $('#absensiTableBody').empty();
+                    data.forEach(absensi => {
+                        $('#absensiTableBody').append(`
+                            <tr>
+                                <td>${absensi._id}</td>
+                                <td>${absensi.siswa}</td>
+                                <td>${absensi.tanggal}</td>
+                                <td>${absensi.statusKehadiran}</td>
+                                <td>
+                                    <button class="btn btn-warning" onclick="showEditAbsensiForm('${absensi._id}')">Edit</button>
+                                    <button class="btn btn-danger" onclick="deleteAbsensi('${absensi._id}')">Hapus</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+            }
+
+            // Show Edit Absensi Form
+            window.showEditAbsensiForm = function(id) {
+                $.get(`http://localhost:3000/api/absensi/${id}`, function(absensi) {
+                    $('#absensiFormTitle').text('Edit Absensi');
+                    $('#absensiSiswa').val(absensi.siswa);
+                    $('#absensiTanggal').val(absensi.tanggal);
+                    $('#absensiStatus').val(absensi.statusKehadiran);
+                    $('#absensiForm').data('id', absensi._id);
+                    $('#absensiFormModal').modal('show');
+                });
+            };
+
+            // Submit Absensi Form
+            $('#absensiForm').on('submit', function(event) {
+                event.preventDefault();
+                const id = $(this).data('id');
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `http://localhost:3000/api/absensi/${id}` : 'http://localhost:3000/api/absensi';
+                const absensi = {
+                    siswa: $('#absensiSiswa').val(),
+                    tanggal: $('#absensiTanggal').val(),
+                    status: $('#absensiStatus').val()
+                };
+                $.ajax({
+                    url: url,
+                    method: method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(absensi),
+                    success: function() {
+                        $('#absensiFormModal').modal('hide');
+                        fetchAbsensi();
+                    }
+                });
+            });
+
+            // Delete Absensi
+            window.deleteAbsensi = function(id) {
+                if (confirm('Apakah Anda yakin ingin menghapus absensi ini?')) {
+                    $.ajax({
+                        url: `http://localhost:3000/api/absensi/${id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            fetchAbsensi();
+                        }
+                    });
+                }
+            };
+        });
+    </script>
+</body>
+</html>

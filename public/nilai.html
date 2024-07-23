@@ -3,57 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <title>Data Siswa</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Data Nilai</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">E-Raport</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="siswa.html">Siswa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="guru.html">Guru</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="kelas.html">Kelas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="absensi.html">Absensi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="nilai.html">Nilai</a>
-                </li>
-            </ul>
-        </div>
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="index.html" class="nav-link" id="homeLink">Home</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="siswa.html" class="navl-link" id="siswaLink">Siswa</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="guru.html" class="nav-link" id="guruLink">Guru</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="mapel.html" class="nav-link" id="mapelLink">Mata Pelajaran</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="kelas.html" class="nav-link" id="kelasLink">Kelas</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="absensi.html" class="nav-link" id="absensiLink">Absensi</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="nilai.html" class="nav-link" id="nilaiLink">Nilai</a>
+            </li>
+        </ul>
     </nav>
     
     <div class="container">
-        <h1>Data Siswa</h1>
-        <button class="btn btn-primary" onclick="showAddSiswaForm()">Tambah Siswa</button>
+        <h1>Data Nilai</h1>
+        <button class="btn btn-primary" onclick="showAddNilaiForm()">Tambah Nilai</button>
         <table class="table table-striped">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nama</th>
-                    <th>Kelas</th>
+                    <th>Siswa</th>
+                    <th>Mata Pelajaran</th>
+                    <th>Nilai</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="siswaTableBody">
-                <!-- Data Siswa akan dimuat di sini -->
+            <tbody id="nilaiTableBody">
+                <!-- Data Nilai akan dimuat di sini -->
             </tbody>
         </table>
     </div>
 
-    <script src="js/main.js"></script>
+    <!-- Add/Edit Nilai Form -->
+    <div id="nilaiFormModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="nilaiFormTitle">Tambah Nilai</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="nilaiForm">
+                        <div class="form-group">
+                            <label for="nilaiSiswa">Siswa</label>
+                            <input type="text" class="form-control" id="nilaiSiswa" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nilaiMapel">Mata Pelajaran</label>
+                            <input type="text" class="form-control" id="nilaiMapel" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="nilaiNilai">Nilai</label>
+                            <input type="number" class="form-control" id="nilaiNilai" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            fetchNilai();
+
+            // Show Add Nilai Form
+            window.showAddNilaiForm = function() {
+                $('#nilaiFormTitle').text('Tambah Nilai');
+                $('#nilaiForm')[0].reset();
+                $('#nilaiFormModal').modal('show');
+            };
+
+            // Fetch All Nilai
+            function fetchNilai() {
+                $.get('http://localhost:3000/api/nilai', function(data) {
+                    $('#nilaiTableBody').empty();
+                    data.forEach(nilai => {
+                        $('#nilaiTableBody').append(`
+                            <tr>
+                                <td>${nilai._id}</td>
+                                <td>${nilai.siswa}</td>
+                                <td>${nilai.mapel}</td>
+                                <td>${nilai.nilai}</td>
+                                <td>
+                                    <button class="btn btn-warning" onclick="showEditNilaiForm('${nilai._id}')">Edit</button>
+                                    <button class="btn btn-danger" onclick="deleteNilai('${nilai._id}')">Hapus</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+            }
+
+            // Show Edit Nilai Form
+            window.showEditNilaiForm = function(id) {
+                $.get(`http://localhost:3000/api/nilai/${id}`, function(nilai) {
+                    $('#nilaiFormTitle').text('Edit Nilai');
+                    $('#nilaiSiswa').val(nilai.siswa);
+                    $('#nilaiMapel').val(nilai.mapel);
+                    $('#nilaiNilai').val(nilai.nilai);
+                    $('#nilaiForm').data('id', nilai._id);
+                    $('#nilaiFormModal').modal('show');
+                });
+            };
+
+            // Submit Nilai Form
+            $('#nilaiForm').on('submit', function(event) {
+                event.preventDefault();
+                const id = $(this).data('id');
+                const method = id ? 'PUT' : 'POST';
+                const url = id ? `http://localhost:3000/api/nilai/${id}` : 'http://localhost:3000/api/nilai';
+                const nilai = {
+                    siswa: $('#nilaiSiswa').val(),
+                    mapel: $('#nilaiMapel').val(),
+                    nilai: $('#nilaiNilai').val()
+                };
+                $.ajax({
+                    url: url,
+                    method: method,
+                    contentType: 'application/json',
+                    data: JSON.stringify(nilai),
+                    success: function() {
+                        $('#nilaiFormModal').modal('hide');
+                        fetchNilai();
+                    }
+                });
+            });
+
+            // Delete Nilai
+            window.deleteNilai = function(id) {
+                if (confirm('Apakah Anda yakin ingin menghapus nilai ini?')) {
+                    $.ajax({
+                        url: `http://localhost:3000/api/nilai/${id}`,
+                        method: 'DELETE',
+                        success: function() {
+                            fetchNilai();
+                        }
+                    });
+                }
+            };
+        });
+    </script>
 </body>
 </html>
