@@ -1,9 +1,9 @@
 const Kelas = require('../models/kelasModels');
 
 exports.createKelas = async (req, res) => {
-    const { nama, siswa } = req.body;
+    const { namaKelas } = req.body;
     try {
-        const newKelas = new Kelas({ nama, siswa });
+        const newKelas = new Kelas({ namaKelas });
         const kelas = await newKelas.save();
         res.status(201).json({ kelas });
     } catch (error) {
@@ -13,7 +13,7 @@ exports.createKelas = async (req, res) => {
 
 exports.getAllKelas = async (req, res) => {
     try {
-        const kelas = await Kelas.find().populate('siswa');
+        const kelas = await Kelas.find();
         res.status(200).json(kelas);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -22,7 +22,7 @@ exports.getAllKelas = async (req, res) => {
 
 exports.getKelasById = async (req, res) => {
     try {
-        const kelas = await Kelas.findById(req.params.id).populate('siswa');
+        const kelas = await Kelas.findById(req.params.id).populate('');
         if (!kelas) {
             return res.status(404).json({ error: 'Kelas tidak ditemukan' });
         }

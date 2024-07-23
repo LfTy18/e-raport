@@ -1,9 +1,9 @@
 const Siswa = require('../models/siswaModels');
 
 exports.createSiswa = async (req, res) => {
-    const { nama, nis, kelas } = req.body;
+    const { no, nama, nis, kelasId } = req.body;
     try {
-        const newSiswa = new Siswa({ nama, nis, kelasId });
+        const newSiswa = new Siswa({no, nama, nis, kelasId });
         const siswa = await newSiswa.save();
         res.status(201).json(siswa);
     } catch (error) {
@@ -13,7 +13,10 @@ exports.createSiswa = async (req, res) => {
 
 exports.getAllSiswa = async (req, res) => {
     try {
-        const siswa = await Siswa.find().populate('kelasId');
+        const siswa = await Siswa.find().populate({
+            path: 'kelasId',
+            select: 'namaKelas' // Only include the namaKelas field
+        });
         res.status(200).json(siswa);
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -23,7 +26,7 @@ exports.getAllSiswa = async (req, res) => {
 exports.updateSiswa = async (req, res) => {
     const { nama, nis } = req.body;
     try {
-        const siswa = await Siswa.findByIdAndUpdate(req.params.id, { nama, nis, kelasId }, { new: true });
+        const siswa = await Siswa.findByIdAndUpdate(req.params.id, { no, nama, nis, kelasId }, { new: true });
         if (!siswa) {
             return res.status(404).json({ message: "Siswa tidak ditemukan" });
         }
@@ -36,7 +39,7 @@ exports.updateSiswa = async (req, res) => {
 
 exports.getSiswaById = async (req, res) => {
     try {
-        const siswa = await Siswa.findByIdAndUpdate(req.params.id, { nama, nis, kelasId }, { new: true });
+        const siswa = await Siswa.findByIdAndUpdate(req.params.id, { no, nama, nis, kelasId }, { new: true });
         if (!siswa) {
             return res.status(404).json({ error: 'Siswa tidak ditemukan' });
         }

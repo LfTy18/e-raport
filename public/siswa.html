@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
+    <title>Data Siswa</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">E-Raport</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <a href="index.html" class="nav-link" id="homeLink">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>Home</p>
+                <li class="nav-item">
+                    <a class="nav-link" href="siswa.html">Siswa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="guru.html">Guru</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="kelas.html">Kelas</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="absensi.html">Absensi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="nilai.html">Nilai</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <h1>Data Siswa</h1>
+        <button class="btn btn-primary" onclick="showAddSiswaForm()">Tambah Siswa</button>
+        
+        <!-- Add/Edit Form -->
+        <div id="siswaFormContainer" style="display: none;">
+            <form id="siswaForm" onsubmit="saveSiswa(event)">
+                <input type="hidden" id="siswaId">
+                <div class="mb-3">
+                    <label for="nama" class="form-label">Nama</label>
+                    <input type="text" class="form-control" id="nama" required>
+                </div>
+                <div class="mb-3">
+                    <label for="nis" class="form-label">NIS</label>
+                    <input type="text" class="form-control" id="nis" required>
+                </div>
+                <div class="mb-3">
+                    <label for="kelas" class="form-label">Kelas</label>
+                    <input type="text" class="form-control" id="kelas" required>
+                </div>
+                <button type="submit" class="btn btn-success">Save</button>
+                <button type="button" class="btn btn-secondary" onclick="hideSiswaForm()">Cancel</button>
+            </form>
+        </div>
+
+        <table class="table table-striped mt-3">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>NIS</th>
+                    <th>Kelas</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="siswaTableBody">
+                <!-- Data Siswa akan dimuat di sini -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetchSiswaData();
+        });
+
+        async function fetchSiswaData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/siswa');
+                const data = await response.json();
+                populateSiswaTable(data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+
+        function populateSiswaTable(siswaData) {
+            const tableBody = document.getElementById('siswaTableBody');
+            tableBody.innerHTML = ''; // Clear existing data
+
+            siswaData.forEach(siswa => {
+                const row = document.createElement('tr');
+
+                row.innerHTML = `
+                    <td>${siswa._id}</td>
+                    <td>${siswa.nama}</td>
+                    <td>${siswa.nis}</td>
+                    <td>${siswa.kelasId[0].namaKelas}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="showEditSiswaForm('${siswa._id}')">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteSiswa('${siswa._id}')">Delete</button>
+                    </td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        function showAddSiswaForm() {
+            document.getElementById('siswaForm').reset();
+            document.getElementById('siswaId').value = '';
+            document.getElementById('siswaFormContainer').style.display = 'block';
+        }
+
+        function showEditSiswaForm(id) {
+            fetch(`http://localhost:3000/api/siswa/${id}`)
+                .then(response => response.json())
+                .then(siswa => {
+                    document.getElementById('siswaId').value = siswa._id;
+                    document.getElementById('nama').value = siswa.nama;
+                    document.getElementById('nis').value = siswa.nis;
+                    document.getElementById('kelas').value = siswa.kelasId[0].namaKelas;
+                    document.getElementById('siswaFormContainer').style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching siswa:', error));
+        }
+
+        function hideSiswaForm() {
+            document.getElementById('siswaFormContainer').style.display = 'none';
+        }
+
+        async function saveSiswa(event) {
+            event.preventDefault();
+
+            const id = document.getElementById('siswaId').value;
+            const nama = document.getElementById('nama').value;
+            const nis = document.getElementById('nis').value;
+            const kelas = document.getElementById('kelas').value;
+
+            const siswa = { nama, nis, kelas };
+
+            try {
+                if (id) {
+                    await fetch(`http://localhost:3000/api/siswa/${id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(siswa)
+                    });
+                } else {
+                    await fetch('http://localhost:3000/api/siswa', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(siswa)
+                    });
+                }
+
+                hideSiswaForm();
+                fetchSiswaData();
+            } catch (error) {
+                console.error('Error saving siswa:', error);
+            }
+        }
+
+        async function deleteSiswa(id) {
+            try {
+                await fetch(`http://localhost:3000/api/siswa/${id}`, {
+                    method: 'DELETE'
+                });
+
+                fetchSiswaData();
+            } catch (error) {
+                console.error('Error deleting siswa:', error);
+            }
+        }
+    </script>
+</body>
+</html>
