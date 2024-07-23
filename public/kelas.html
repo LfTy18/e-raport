@@ -97,7 +97,7 @@
                         $('#kelasTableBody').append(`
                             <tr>
                                 <td>${kelas._id}</td>
-                                <td>${kelas.nama}</td>
+                                <td>${kelas.namaKelas}</td>
                                 <td>
                                     <button class="btn btn-warning" onclick="showEditKelasForm('${kelas._id}')">Edit</button>
                                     <button class="btn btn-danger" onclick="deleteKelas('${kelas._id}')">Hapus</button>
@@ -112,7 +112,7 @@
             window.showEditKelasForm = function(id) {
                 $.get(`http://localhost:3000/api/kelas/${id}`, function(kelas) {
                     $('#kelasFormTitle').text('Edit Kelas');
-                    $('#kelasNama').val(kelas.nama);
+                    $('#kelasNama').val(kelas.namaKelas);
                     $('#kelasForm').data('id', kelas._id);
                     $('#kelasFormModal').modal('show');
                 });

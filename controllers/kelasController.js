@@ -33,9 +33,9 @@ exports.getKelasById = async (req, res) => {
 };
 
 exports.updateKelas = async (req, res) => {
-    const { nama, siswa } = req.body;
+    const { namaKelas } = req.body;
     try {
-        const kelas = await Kelas.findByIdAndUpdate(req.params.id, { nama, siswa }, { new: true});
+        const kelas = await Kelas.findByIdAndUpdate(req.params.id, { namaKelas }, { new: true});
         if (!kelas) {
             return res.status(404).json({ error: 'Kelas tidak ditemukan' });
         }

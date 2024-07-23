@@ -51,7 +51,7 @@
 
     exports.deleteSiswa = async (req, res) => {
         try {
-            const siswa = await Siswa.findbyIdAndDelete(req.params.id);
+            const siswa = await Siswa.findByIdAndDelete(req.params.id);
             if (!siswa) {
                 return res.status(404).json({ error: 'Siswa tidak ditemukan' });
             }
@@ -60,3 +60,15 @@
             res.status(500).json({ error: error.message });
         }
     };
+
+    // exports.deleteSiswaById = async (req, res) => {
+    //     try {
+    //         const siswa = await Siswa.findbyIdAndDelete(req.params.id);
+    //         if (!siswa) {
+    //             return res.status(404).json({ error: 'Siswa tidak ditemukan' });
+    //         }
+    //         res.status(200).json({ message: 'Siswa berhasil dihapus' });
+    //     } catch(error) {
+    //         res.status(500).json({ error: error.message });
+    //     }
+    // }
