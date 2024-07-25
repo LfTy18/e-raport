@@ -1,18 +1,15 @@
 const mongoose = require('mongoose');
 
-const loginSchema = new mongoose.Schema({
-    nis: {
+const LoginSchema = new mongoose.Schema({
+    id: {
         type: String,
-        unique: true,
-        sparse: true
+        required: true,
+        unique: true
     },
-    nip: {
+    role: {
         type: String,
-        unique: true,
-        sparse: true
+        required: true
     }
 });
 
-const Login = mongoose.model('Login', loginSchema);
-
-module.exports = Login;
+module.exports = mongoose.model('Login', LoginSchema);

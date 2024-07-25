@@ -1,22 +1,22 @@
-const Login = require('../models/loginModels');
 const Siswa = require('../models/siswaModels');
 const Guru = require('../models/guruModels');
 
 exports.login = async (req, res) => {
-    const { identifier } = req.body;
+    const { id } = req.body;
+
     try {
-        const siswa = await Siswa.findOne({ nis: identifier });
+        const siswa = await Siswa.findOne({ nis: id });
         if (siswa) {
-            return res.status(200).json({ role: 'siswa', id: siswa.nis });
+            return res.status(200).json({ role: 'siswa' });
         }
 
-        const guru = await Guru.findOne({ nip: identifier });
+        const guru = await Guru.findOne({ nip: id });
         if (guru) {
-            return res.status(200).json({ role: 'guru', id: guru.nip });
+            return res.status(200).json({ role: 'guru' });
         }
 
-        return res.status(400).json({ error: 'Invalid NIS or NIP' });
+        return res.status(401).json({ message: 'Invalid NIS/NIP' });
     } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(500).json({ message: error.message });
     }
 };

@@ -11,40 +11,35 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Login</h1>
-        <form id="loginForm" class="mt-3">
+        <h1>Login</h1>
+        <form id="loginForm">
             <div class="mb-3">
-                <label for="identifier" class="form-label">NIS/NIP</label>
-                <input type="text" class="form-control" id="identifier" required>
+                <label for="id" class="form-label">NIS/NIP</label>
+                <input type="text" class="form-control" id="id" required>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
         </form>
     </div>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
             event.preventDefault();
-            const identifier = document.getElementById('identifier').value;
+            const id = document.getElementById('id').value;
 
-            // Check if the identifier is for a student or teacher
-            fetch(`http://localhost:3000/api/login`, {
+            const response = await fetch('http://localhost:3000/api/login', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ identifier })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.role === 'student') {
-                    window.location.href = `nilai.html?nis=${identifier}&readonly=true`;
-                } else if (data.role === 'teacher') {
-                    window.location.href = 'nilai.html';
-                } else {
-                    alert('Invalid NIS/NIP');
-                }
-            })
-            .catch(error => console.error('Error during login:', error));
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+
+            const result = await response.json();
+            if (result.role === 'siswa') {
+                window.location.href = 'nilai.html';
+            } else if (result.role === 'guru') {
+                window.location.href = 'guru.html';
+            } else {
+                alert('Login failed');
+            }
         });
     </script>
 </body>

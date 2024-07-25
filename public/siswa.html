@@ -10,173 +10,184 @@
     <title>Data Siswa</title>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">E-Raport</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="siswa.html">Siswa</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="guru.html">Guru</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="kelas.html">Kelas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="absensi.html">Absensi</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="nilai.html">Nilai</a>
-                </li>
-            </ul>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">E-Raport</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="siswa.html">Siswa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="guru.html">Guru</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kelas.html">Kelas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="absensi.html">Absensi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="nilai.html">Nilai</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <h1>Data Siswa</h1>
+            <button class="btn btn-primary" onclick="showAddSiswaForm()">Tambah Siswa</button>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama</th>
+                        <th>NIS</th>
+                        <th>Kelas</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="siswaTableBody">
+                    <!-- Data Siswa akan dimuat di sini -->
+                </tbody>
+            </table>
         </div>
-    </nav>
     
-    <div class="container">
-        <h1>Data Siswa</h1>
-        <button class="btn btn-primary" onclick="showAddSiswaForm()">Tambah Siswa</button>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama</th>
-                    <th>Kelas</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="siswaTableBody">
-                <!-- Data Siswa akan dimuat di sini -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal for Add/Edit Siswa -->
-    <div class="modal fade" id="siswaModal" tabindex="-1" aria-labelledby="siswaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="siswaModalLabel">Tambah Siswa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="siswaForm">
-                        <input type="hidden" id="siswaId">
-                        <div class="mb-3">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input type="text" class="form-control" id="nama" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="nis" class="form-label">NIS</label>
-                            <input type="text" class="form-control" id="nis" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="kelasId" class="form-label">Kelas</label>
-                            <input type="text" class="form-control" id="kelasId" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </form>
+        <!-- Modal Form -->
+        <div class="modal fade" id="siswaModal" tabindex="-1" aria-labelledby="siswaModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="siswaModalLabel">Tambah Siswa</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="siswaForm">
+                            <input type="hidden" id="siswaId">
+                            <div class="mb-3">
+                                <label for="nama" class="form-label">Nama</label>
+                                <input type="text" class="form-control" id="nama" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nis" class="form-label">NIS</label>
+                                <input type="text" class="form-control" id="nis" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="kelas" class="form-label">Kelas</label>
+                                <select class="form-control" id="kelas">
+                                    <!-- Options will be loaded dynamically -->
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="saveSiswa()">Save</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        // Function to show the Add Siswa form
-        function showAddSiswaForm() {
-            document.getElementById('siswaForm').reset();
-            document.getElementById('siswaId').value = '';
-            new bootstrap.Modal(document.getElementById('siswaModal')).show();
-        }
-
-        // Function to load all siswa data
-        function loadSiswa() {
-            fetch('http://localhost:3000/api/siswa')
-                .then(response => response.json())
-                .then(data => {
-                    const siswaTableBody = document.getElementById('siswaTableBody');
-                    siswaTableBody.innerHTML = '';
-                    data.forEach(siswa => {
-                        const row = `
-                            <tr>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                fetchSiswa();
+    
+                // Fetch options for Kelas select
+                fetch('http://localhost:3000/api/kelas')
+                    .then(response => response.json())
+                    .then(data => {
+                        const kelasSelect = document.getElementById('kelas');
+                        data.forEach(kelas => {
+                            const option = document.createElement('option');
+                            option.value = kelas._id;
+                            option.textContent = kelas.namaKelas;
+                            kelasSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching kelas:', error));
+            });
+    
+            function fetchSiswa() {
+                fetch('http://localhost:3000/api/siswa')
+                    .then(response => response.json())
+                    .then(data => {
+                        const tbody = document.getElementById('siswaTableBody');
+                        tbody.innerHTML = '';
+                        data.forEach(siswa => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
                                 <td>${siswa._id}</td>
                                 <td>${siswa.nama}</td>
-                                <td>${siswa.kelasId.namaKelas}</td>
+                                <td>${siswa.nis}</td>
+                                <td>${siswa.kelas ? siswa.kelas.namaKelas : 'N/A'}</td>
                                 <td>
-                                    <button class="btn btn-warning" onclick="showEditSiswaForm('${siswa._id}')">Edit</button>
-                                    <button class="btn btn-danger" onclick="deleteSiswa('${siswa._id}')">Delete</button>
+                                    <button class="btn btn-warning btn-sm" onclick="showEditSiswaForm('${siswa._id}')">Edit</button>
+                                    <button class="btn btn-danger btn-sm" onclick="deleteSiswa('${siswa._id}')">Delete</button>
                                 </td>
-                            </tr>
-                        `;
-                        siswaTableBody.innerHTML += row;
-                    });
-                })
-                .catch(error => console.error('Error loading siswa:', error));
-        }
-
-        // Function to show the Edit Siswa form
-        function showEditSiswaForm(id) {
-            fetch(`http://localhost:3000/api/siswa/${id}`)
-                .then(response => response.json())
-                .then(siswa => {
-                    document.getElementById('siswaId').value = siswa._id;
-                    document.getElementById('nama').value = siswa.nama;
-                    document.getElementById('nis').value = siswa.nis;
-                    document.getElementById('kelasId').value = siswa.kelasId._id;
-                    new bootstrap.Modal(document.getElementById('siswaModal')).show();
-                })
-                .catch(error => console.error('Error fetching siswa:', error));
-        }
-
-        // Function to delete a siswa
-        function deleteSiswa(id) {
-            fetch(`http://localhost:3000/api/siswa/${id}`, {
-                method: 'DELETE'
-            })
-                .then(response => {
-                    if (response.ok) {
-                        loadSiswa();
-                    } else {
-                        console.error('Error deleting siswa');
-                    }
-                })
-                .catch(error => console.error('Error deleting siswa:', error));
-        }
-
-        // Add event listener to the form submit event
-        document.getElementById('siswaForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const id = document.getElementById('siswaId ').value;
-            const nama = document.getElementById('nama').value;
-            const nis = document.getElementById('nis').value;
-            const kelasId = document.getElementById('kelasId').value;
-
-            const method = id ? 'PUT' : 'POST';
-            const url = id ? `http://localhost:3000/api/siswa/${id}` : 'http://localhost:3000/api/siswa';
-
-            fetch(url, {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ nama, nis, kelasId })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    new bootstrap.Modal(document.getElementById('siswaModal')).hide();
-                    loadSiswa();
-                })
-                .catch(error => console.error('Error saving siswa:', error));
-        });
-
-        // Load siswa data when the page loads
-        document.addEventListener('DOMContentLoaded', loadSiswa);
-    </script>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching siswa:', error));
+            }
+    
+            function showAddSiswaForm() {
+                document.getElementById('siswaForm').reset();
+                document.getElementById('siswaId').value = '';
+                new bootstrap.Modal(document.getElementById('siswaModal')).show();
+            }
+    
+            function saveSiswa() {
+                const id = document.getElementById('siswaId').value;
+                const nama = document.getElementById('nama').value;
+                const nis = document.getElementById('nis').value;
+                const kelas = document.getElementById('kelas').value;
+    
+                const url = id ? `http://localhost:3000/api/siswa/${id}` : 'http://localhost:3000/api/siswa';
+                const method = id ? 'PUT' : 'POST';
+    
+                fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ nama, nis, kelas })
+                }).then(response => response.json())
+                .then(() => {
+                    fetchSiswa();
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('siswaModal'));
+                    modal.hide();
+                }).catch(error => console.error('Error saving siswa:', error));
+            }
+    
+            function showEditSiswaForm(id) {
+                fetch(`http://localhost:3000/api/siswa/${id}`)
+                    .then(response => response.json())
+                    .then(siswa => {
+                        document.getElementById('siswaId').value = siswa._id;
+                        document.getElementById('nama').value = siswa.nama;
+                        document.getElementById('nis').value = siswa.nis;
+                        document.getElementById('kelas').value = siswa.kelas;
+                        new bootstrap.Modal(document.getElementById('siswaModal')).show();
+                    })
+                    .catch(error => console.error('Error fetching siswa:', error));
+            }
+    
+            function deleteSiswa(id) {
+                if (confirm('Are you sure you want to delete this siswa?')) {
+                    fetch(`http://localhost:3000/api/siswa/${id}`, { method: 'DELETE' })
+                        .then(() => fetchSiswa())
+                        .catch(error => console.error('Error deleting siswa:', error));
+                }
+            }
+        </script>
+    
+   
 </body>
 </html>
