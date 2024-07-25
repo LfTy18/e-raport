@@ -9,6 +9,7 @@ const mapelRoutes = require('./routes/mapelRoutes');
 const kelasRoutes = require('./routes/kelasRoutes');
 const nilaiRoutes = require('./routes/nilaiRoutes');
 const absensiRoutes = require('./routes/absensiRoutes');
+const loginRoutes = require('./routes/loginRoutes');
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.use('/api/mapel', mapelRoutes);
 app.use('/api/kelas', kelasRoutes);
 app.use('/api/nilai', nilaiRoutes);
 app.use('/api/absensi', absensiRoutes);
-
+app.use('api/login', loginRoutes);
 app.use(express.static('public'));
 
 const PORT = process.env.PORT || 3000;
