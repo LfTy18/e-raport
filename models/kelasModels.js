@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const KelasSchema = new mongoose.Schema ({
-    namaKelas: { type: String, required: true },
-    
+const kelasSchema = new Schema({
+    nama_kelas: { type: String, required: true },
+    id_guru: { type: Schema.Types.ObjectId, ref: 'Guru' } // Reference to the Guru collection
 });
 
-module.exports = mongoose.model('Kelas', KelasSchema);
+const Kelas = mongoose.model('Kelas', kelasSchema);
+
+module.exports = Kelas;

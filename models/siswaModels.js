@@ -1,11 +1,14 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const SiswaSchema = new mongoose.Schema({
-    no: {type: Number, required: true},
-    nama: { type: String, required: true },
-    nis: { type: String, required: true },
-    kelasId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Kelas', required: true }]
+const siswaSchema = new Schema({
+    nama_siswa: { type: String, required: true },
+    nis: { type: String, required: true, unique: true },
+    tanggal_lahir: { type: Date, required: true },
+    alamat: { type: String },
+    id_kelas: { type: Schema.Types.ObjectId, ref: 'Kelas' } // Assuming 'Kelas' is another collection
 });
 
-const Siswa = mongoose.model('Siswa', SiswaSchema);
+const Siswa = mongoose.model('Siswa', siswaSchema);
+
 module.exports = Siswa;

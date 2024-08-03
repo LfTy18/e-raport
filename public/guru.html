@@ -3,181 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Guru</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.1.0/css/adminlte.min.css" rel="stylesheet">
-    <title>Data Guru</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="index.html" class="nav-link" id="homeLink">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="siswa.html" class="navl-link" id="siswaLink">Siswa</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="guru.html" class="nav-link" id="guruLink">Guru</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="mapel.html" class="nav-link" id="mapelLink">Mata Pelajaran</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="kelas.html" class="nav-link" id="kelasLink">Kelas</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="absensi.html" class="nav-link" id="absensiLink">Absensi</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="nilai.html" class="nav-link" id="nilaiLink">Nilai</a>
-            </li>
-        </ul>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">E-Raport</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="siswa.html">Siswa</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="guru.html">Guru</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="kelas.html">Kelas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="absensi.html">Absensi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="nilai.html">Nilai</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
 
-    
-    <div class="container">
-        <h1>Data Guru</h1>
-        <button class="btn btn-primary" onclick="showAddGuruForm()">Tambah Guru</button>
-        
-        <!-- Add/Edit Form -->
-        <div id="guruFormContainer" style="display: none;">
-            <form id="guruForm" onsubmit="saveGuru(event)">
-                <input type="hidden" id="guruId">
-                <div class="mb-3">
-                    <label for="nama" class="form-label">Nama</label>
-                    <input type="text" class="form-control" id="nama" required>
-                </div>
-                <div class="mb-3">
-                    <label for="nip" class="form-label">NIP</label>
-                    <input type="text" class="form-control" id="nip" required>
-                </div>
-                <button type="submit" class="btn btn-success">Save</button>
-                <button type="button" class="btn btn-secondary" onclick="hideGuruForm()">Cancel</button>
-            </form>
-        </div>
+    <div class="container mt-4">
+        <h1>Guru</h1>
+        <form id="guruForm">
+            <div class="mb-3">
+                <label for="nama_guru" class="form-label">Nama Guru</label>
+                <input type="text" class="form-control" id="nama_guru" required>
+            </div>
+            <div class="mb-3">
+                <label for="nip" class="form-label">NIP</label>
+                <input type="text" class="form-control" id="nip" required>
+            </div>
+            <div class="mb-3">
+                <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                <input type="date" class="form-control" id="tanggal_lahir" required>
+            </div>
+            <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat</label>
+                <textarea class="form-control" id="alamat"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
 
-        <table class="table table-striped mt-3">
+        <h2 class="mt-4">Daftar Guru</h2>
+        <table class="table table-bordered" id="guruTable">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nama</th>
+                    <th>Nama Guru</th>
                     <th>NIP</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Alamat</th>
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="guruTableBody">
-                <!-- Data Guru akan dimuat di sini -->
+            <tbody>
+                <!-- Data will be populated dynamically -->
             </tbody>
         </table>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            fetchGuruData();
+            fetchGuru();
+
+            document.getElementById('guruForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                createGuru();
+            });
         });
 
-        async function fetchGuruData() {
-            try {
-                const response = await fetch('http://localhost:3000/api/guru');
-                const data = await response.json();
-                populateGuruTable(data);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+        function fetchGuru() {
+            fetch('http://localhost:3000/api/guru')
+                .then(response => response.json())
+                .then(data => {
+                    const guruTable = document.getElementById('guruTable').getElementsByTagName('tbody')[0];
+                    guruTable.innerHTML = '';
+                    data.forEach(guru => {
+                        const row = guruTable.insertRow();
+                        row.insertCell(0).innerText = guru._id;
+                        row.insertCell(1).innerText = guru.nama_guru;
+                        row.insertCell(2).innerText = guru.nip;
+                        row.insertCell(3).innerText = guru.tanggal_lahir;
+                        row.insertCell(4).innerText = guru.alamat;
+                        row.insertCell(5).innerHTML = `
+                            <button class="btn btn-warning btn-sm" onclick="editGuru('${guru._id}')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteGuru('${guru._id}')">Delete</button>
+                        `;
+                    });
+                });
         }
 
-        function populateGuruTable(guruData) {
-            const tableBody = document.getElementById('guruTableBody');
-            tableBody.innerHTML = ''; // Clear existing data
+        function createGuru() {
+            const nama_guru = document.getElementById('nama_guru').value;
+            const nip = document.getElementById('nip').value;
+            const tanggal_lahir = document.getElementById('tanggal_lahir').value;
+            const alamat = document.getElementById('alamat').value;
 
-            guruData.forEach(guru => {
-                const row = document.createElement('tr');
+            const data = {
+                nama_guru,
+                nip,
+                tanggal_lahir,
+                alamat
+            };
 
-                row.innerHTML = `
-                    <td>${guru._id}</td>
-                    <td>${guru.nama}</td>
-                    <td>${guru.nip}</td>
-                    <td>
-                        <button class="btn btn-warning" onclick="showEditGuruForm('${guru._id}')">Edit</button>
-                        <button class="btn btn-danger" onclick="deleteGuru('${guru._id}')">Delete</button>
-                    </td>
-                `;
-
-                tableBody.appendChild(row);
+            fetch('http://localhost:3000/api/guru', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchGuru();
+                document.getElementById('guruForm').reset();
             });
         }
 
-        function showAddGuruForm() {
-            document.getElementById('guruForm').reset();
-            document.getElementById('guruId').value = '';
-            document.getElementById('guruFormContainer').style.display = 'block';
-        }
-
-        function showEditGuruForm(id) {
-            fetch(`http://localhost:3000/api/guru/${id}`)
-                .then(response => response.json())
-                .then(guru => {
-                    document.getElementById('guruId').value = guru._id;
-                    document.getElementById('nama').value = guru.nama;
-                    document.getElementById('nip').value = guru.nip;
-                    document.getElementById('guruFormContainer').style.display = 'block';
-                })
-                .catch(error => console.error('Error fetching guru:', error));
-        }
-
-        function hideGuruForm() {
-            document.getElementById('guruFormContainer').style.display = 'none';
-        }
-
-        async function saveGuru(event) {
-            event.preventDefault();
-
-            const id = document.getElementById('guruId').value;
-            const nama = document.getElementById('nama').value;
+        function editGuru(id) {
+            fetch(`http://localhost:3000/api/guru/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(guru => {
+                document.getElementById('guru_id').value = guru._id;
+                document.getElementById('nama_guru').value = guru.nama_guru;
+                document.getElementById('nip').value = guru.nip;
+                document.getElementById('tanggal_lahir').value = guru.tanggal_lahir.split('T')[0];
+                document.getElementById('alamat').value = guru.alamat;
+            });
+            const nama_guru = document.getElementById('nama_guru').value;
             const nip = document.getElementById('nip').value;
+            const tanggal_lahir = document.getElementById('tanggal_lahir').value;
+            const alamat = document.getElementById('alamat').value;
 
-            const guru = { nama, nip };
-
-            try {
-                if (id) {
-                    await fetch(`http://localhost:3000/api/guru/${id}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(guru)
-                    });
-                } else {
-                    await fetch('http://localhost:3000/api/guru', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(guru)
-                    });
-                }
-
-                hideGuruForm();
-                fetchGuruData();
-            } catch (error) {
-                console.error('Error saving guru:', error);
-            }
+            const data = {
+                nama_guru,
+                nip,
+                tanggal_lahir,
+                alamat
+            };// Implement edit function
         }
 
         function deleteGuru(id) {
-            if (confirm('Are you sure you want to delete this siswa?')) {
-                fetch(`http://localhost:3000/api/guru/${id}`, {
-                    method: 'DELETE'
-                })
-                .then(response => response.json())
-                .then(data => {
-                    fetchGuruData();
-                })
-                .catch(error => console.error('Error deleting siswa data:', error));
-            }
+            fetch(`http://localhost:3000/api/guru/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => {
+                fetchGuru();
+            });
         }
     </script>
 </body>

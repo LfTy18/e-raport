@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./config/db');
 const cors = require('cors');
 const mongoosee = require('mongoose');
+const bodyParser = require('body-parser');
 
 const siswaRoutes = require('./routes/siswaRoutes');
 const guruRoutes = require('./routes/guruRoutes');

@@ -9,149 +9,129 @@
     <title>Data Mata Pelajaran</title>
 </head>
 <body>
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="index.html" class="nav-link" id="homeLink">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="siswa.html" class="navl-link" id="siswaLink">Siswa</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="guru.html" class="nav-link" id="guruLink">Guru</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="mapel.html" class="nav-link" id="mapelLink">Mata Pelajaran</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="kelas.html" class="nav-link" id="kelasLink">Kelas</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="absensi.html" class="nav-link" id="absensiLink">Absensi</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="nilai.html" class="nav-link" id="nilaiLink">Nilai</a>
-            </li>
-        </ul>
-    </nav>
-    
-    <div class="container">
-        <h1>Data Mata Pelajaran</h1>
-        <button class="btn btn-primary" onclick="showAddMapelForm()">Tambah Mata Pelajaran</button>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="mapelTableBody">
-                <!-- Data Mapel akan dimuat di sini -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Add/Edit Mapel Form -->
-    <div id="mapelFormModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mapelFormTitle">Tambah Mata Pelajaran</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="mapelForm">
-                        <div class="form-group">
-                            <label for="mapelNama">Nama</label>
-                            <input type="text" class="form-control" id="mapelNama" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </form>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">eRaport</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="siswa.html">Siswa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="guru.html">Guru</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="kelas.html">Kelas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="absensi.html">Absensi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="nilai.html">Nilai</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </nav>
+    
+        <div class="container mt-4">
+            <h1>Mata Pelajaran</h1>
+            <form id="mataPelajaranForm">
+                <div class="mb-3">
+                    <label for="nama_pelajaran" class="form-label">Nama Pelajaran</label>
+                    <input type="text" class="form-control" id="nama_pelajaran" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+    
+            <h2 class="mt-4">Daftar Mata Pelajaran</h2>
+            <table class="table table-bordered" id="mataPelajaranTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Pelajaran</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
         </div>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            fetchMapel();
-
-            // Show Add Mapel Form
-            window.showAddMapelForm = function() {
-                $('#mapelFormTitle').text('Tambah Mata Pelajaran');
-                $('#mapelForm')[0].reset();
-                $('#mapelFormModal').modal('show');
-            };
-
-            // Fetch All Mapel
-            function fetchMapel() {
-                $.get('http://localhost:3000/api/mapel', function(data) {
-                    $('#mapelTableBody').empty();
-                    data.forEach(mapel => {
-                        $('#mapelTableBody').append(`
-                            <tr>
-                                <td>${mapel._id}</td>
-                                <td>${mapel.nama}</td>
-                                <td>
-                                    <button class="btn btn-warning" onclick="showEditMapelForm('${mapel._id}')">Edit</button>
-                                    <button class="btn btn-danger" onclick="deleteMapel('${mapel._id}')">Hapus</button>
-                                </td>
-                            </tr>
-                        `);
-                    });
-                });
-            }
-
-            // Show Edit Mapel Form
-            window.showEditMapelForm = function(id) {
-                $.get(`http://localhost:3000/api/mapel/${id}`, function(mapel) {
-                    $('#mapelFormTitle').text('Edit Mata Pelajaran');
-                    $('#mapelNama').val(mapel.nama);
-                    $('#mapelForm').data('id', mapel._id);
-                    $('#mapelFormModal').modal('show');
-                });
-            };
-
-            // Submit Mapel Form
-            $('#mapelForm').on('submit', function(event) {
-                event.preventDefault();
-                const id = $(this).data('id');
-                const method = id ? 'PUT' : 'POST';
-                const url = id ? `http://localhost:3000/api/mapel/${id}` : 'http://localhost:3000/api/mapel';
-                const mapel = {
-                    nama: $('#mapelNama').val()
-                };
-                $.ajax({
-                    url: url,
-                    method: method,
-                    contentType: 'application/json',
-                    data: JSON.stringify(mapel),
-                    success: function() {
-                        $('#mapelFormModal').modal('hide');
-                        fetchMapel();
-                    }
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchMataPelajaran();
+    
+                document.getElementById('mataPelajaranForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    createMataPelajaran();
                 });
             });
-
-            // Delete Mapel
-            window.deleteMapel = function(id) {
-                if (confirm('Apakah Anda yakin ingin menghapus mata pelajaran ini?')) {
-                    $.ajax({
-                        url: `http://localhost:3000/api/mapel/${id}`,
-                        method: 'DELETE',
-                        success: function() {
-                            fetchMapel();
-                        }
+    
+            function fetchMataPelajaran() {
+                fetch('http://localhost:3000/api/mapel')
+                    .then(response => response.json())
+                    .then(data => {
+                        const mataPelajaranTable = document.getElementById('mataPelajaranTable').getElementsByTagName('tbody')[0];
+                        mataPelajaranTable.innerHTML = '';
+                        data.forEach(mataPelajaran => {
+                            const row = mataPelajaranTable.insertRow();
+                            row.insertCell(0).innerText = mataPelajaran._id;
+                            row.insertCell(1).innerText = mataPelajaran.nama_pelajaran;
+                            row.insertCell(2).innerHTML = `
+                                <button class="btn btn-warning btn-sm" onclick="editMataPelajaran('${mataPelajaran._id}')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteMataPelajaran('${mataPelajaran._id}')">Delete</button>
+                            `;
+                        });
                     });
-                }
-            };
-        });
-    </script>
-</body>
-</html>
+            }
+    
+            function createMataPelajaran() {
+                const nama_pelajaran = document.getElementById('nama_pelajaran').value;
+    
+                const data = {
+                    nama_pelajaran
+                };
+    
+                fetch('http://localhost:3000/api/mapel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    fetchMataPelajaran();
+                    document.getElementById('mataPelajaranForm').reset();
+                });
+            }
+    
+            function editMataPelajaran(id) {
+                fetch(`http://localhost:3000/api/mapel/${id}` , {
+                    method: 'PUT'
+                })
+                .then(() => {
+                    fetchMataPelajaran();
+                });
+            }
+    
+            function deleteMataPelajaran(id) {
+                fetch(`http://localhost:3000/api/mapel/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(() => {
+                    fetchMataPelajaran();
+                });
+            }
+        </script>
+    </body>
+    </html>

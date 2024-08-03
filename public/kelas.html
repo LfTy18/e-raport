@@ -9,149 +9,170 @@
     <title>Data Kelas</title>
 </head>
 <body>
-    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="index.html" class="nav-link" id="homeLink">Home</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="siswa.html" class="navl-link" id="siswaLink">Siswa</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="guru.html" class="nav-link" id="guruLink">Guru</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="mapel.html" class="nav-link" id="mapelLink">Mata Pelajaran</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="kelas.html" class="nav-link" id="kelasLink">Kelas</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="absensi.html" class="nav-link" id="absensiLink">Absensi</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-                <a href="nilai.html" class="nav-link" id="nilaiLink">Nilai</a>
-            </li>
-        </ul>
-    </nav>
-    
-    <div class="container">
-        <h1>Data Kelas</h1>
-        <button class="btn btn-primary" onclick="showAddKelasForm()">Tambah Kelas</button>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nama</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="kelasTableBody">
-                <!-- Data Kelas akan dimuat di sini -->
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Add/Edit Kelas Form -->
-    <div id="kelasFormModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="kelasFormTitle">Tambah Kelas</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="kelasForm">
-                        <div class="form-group">
-                            <label for="kelasNama">Nama</label>
-                            <input type="text" class="form-control" id="kelasNama" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                    </form>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">eRaport</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="siswa.html">Siswa</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="guru.html">Guru</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="kelas.html">Kelas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="mapel.html">Mata Pelajaran</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="absensi.html">Absensi</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="nilai.html">Nilai</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
+        </nav>
+    
+        <div class="container mt-4">
+            <h1>Kelas</h1>
+            <form id="kelasForm">
+                <div class="mb-3">
+                    <label for="nama_kelas" class="form-label">Nama Kelas</label>
+                    <input type="text" class="form-control" id="nama_kelas" required>
+                </div>
+                <div class="mb-3">
+                    <label for="id_guru_wali" class="form-label">Guru Wali</label>
+                    <select class="form-select" id="id_guru">
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+    
+            <h2 class="mt-4">Daftar Kelas</h2>
+            <table class="table table-bordered" id="kelasTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Kelas</th>
+                        <th>Nama Guru</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Data will be populated dynamically -->
+                </tbody>
+            </table>
         </div>
-    </div>
-
-    <script>
-        $(document).ready(function() {
-            fetchKelas();
-
-            // Show Add Kelas Form
-            window.showAddKelasForm = function() {
-                $('#kelasFormTitle').text('Tambah Kelas');
-                $('#kelasForm')[0].reset();
-                $('#kelasFormModal').modal('show');
-            };
-
-            // Fetch All Kelas
-            function fetchKelas() {
-                $.get('http://localhost:3000/api/kelas', function(data) {
-                    $('#kelasTableBody').empty();
-                    data.forEach(kelas => {
-                        $('#kelasTableBody').append(`
-                            <tr>
-                                <td>${kelas._id}</td>
-                                <td>${kelas.namaKelas}</td>
-                                <td>
-                                    <button class="btn btn-warning" onclick="showEditKelasForm('${kelas._id}')">Edit</button>
-                                    <button class="btn btn-danger" onclick="deleteKelas('${kelas._id}')">Hapus</button>
-                                </td>
-                            </tr>
-                        `);
-                    });
-                });
-            }
-
-            // Show Edit Kelas Form
-            window.showEditKelasForm = function(id) {
-                $.get(`http://localhost:3000/api/kelas/${id}`, function(kelas) {
-                    $('#kelasFormTitle').text('Edit Kelas');
-                    $('#kelasNama').val(kelas.namaKelas);
-                    $('#kelasForm').data('id', kelas._id);
-                    $('#kelasFormModal').modal('show');
-                });
-            };
-
-            // Submit Kelas Form
-            $('#kelasForm').on('submit', function(event) {
-                event.preventDefault();
-                const id = $(this).data('id');
-                const method = id ? 'PUT' : 'POST';
-                const url = id ? `http://localhost:3000/api/kelas/${id}` : 'http://localhost:3000/api/kelas';
-                const kelas = {
-                    nama: $('#kelasNama').val()
-                };
-                $.ajax({
-                    url: url,
-                    method: method,
-                    contentType: 'application/json',
-                    data: JSON.stringify(kelas),
-                    success: function() {
-                        $('#kelasFormModal').modal('hide');
-                        fetchKelas();
-                    }
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                fetchGuru();
+                fetchKelas();
+    
+                document.getElementById('kelasForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    createKelas();
                 });
             });
-
-            // Delete Kelas
-            window.deleteKelas = function(id) {
-                if (confirm('Apakah Anda yakin ingin menghapus kelas ini?')) {
-                    $.ajax({
-                        url: `http://localhost:3000/api/kelas/${id}`,
-                        method: 'DELETE',
-                        success: function() {
-                            fetchKelas();
-                        }
+    
+            function fetchGuru() {
+                fetch('http://localhost:3000/api/guru')
+                    .then(response => response.json())
+                    .then(data => {
+                        const guruSelect = document.getElementById('id_guru');
+                        data.forEach(guru => {
+                            const option = document.createElement('option');
+                            option.value = guru._id;
+                            option.text = guru.nama_guru;
+                            guruSelect.appendChild(option);
+                        });
                     });
-                }
-            };
-        });
-    </script>
+            }
+    
+            function fetchKelas() {
+                fetch('http://localhost:3000/api/kelas')
+                    .then(response => response.json())
+                    .then(data => {
+                        const kelasTable = document.getElementById('kelasTable').getElementsByTagName('tbody')[0];
+                        kelasTable.innerHTML = '';
+                        data.forEach(kelas => {
+                            const row = kelasTable.insertRow();
+                            row.insertCell(0).innerText = kelas._id;
+                            row.insertCell(1).innerText = kelas.nama_kelas;
+                            row.insertCell(2).innerText = kelas.nama_guru;
+                            row.insertCell(3).innerHTML = `
+                                <button class="btn btn-warning btn-sm" onclick="editKelas('${kelas._id}')">Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteKelas('${kelas._id}')">Delete</button>
+                            `;
+                        });
+                    });
+            }
+    
+            function createKelas() {
+                const nama_kelas = document.getElementById('nama_kelas').value;
+                const id_guru = document.getElementById('id_guru').value;
+    
+                const data = {
+                    nama_kelas,
+                    id_guru
+                };
+    
+                fetch('http://localhost:3000/api/kelas', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    fetchKelas();
+                    document.getElementById('kelasForm').reset();
+                });
+            }
+    
+            function editKelas(id) {
+                const nama_kelas = document.getElementById('nama_kelas').value;
+                const id_guru = document.getElementById('id_guru').value;
+    
+                const data = {
+                    nama_kelas,
+                    id_guru
+                };
+    
+                fetch(`http://localhost:3000/kelas/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(() => {
+                    fetchKelas();
+                    document.getElementById('kelasForm').reset();
+                    document.getElementById('kelas_id').value = '';
+                });// Implement edit function
+            }
+    
+            function deleteKelas(id) {
+                fetch(`http://localhost:3000/kelas/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(() => {
+                    fetchKelas();
+                });
+            }
+        </script>
 </body>
 </html>

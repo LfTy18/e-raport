@@ -1,8 +1,10 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const MapelSchema = new mongoose.Schema({
-    siswa: { type: mongoose.Schema.Types.ObjectId, ref: 'Siswa' },
-    guru: { type: mongoose.Schema.Types.ObjectId, ref: 'Guru'}
+const mataPelajaranSchema = new Schema({
+    nama_pelajaran: { type: String, required: true }
 });
 
-module.exports = mongoose.model('Mapel', MapelSchema);
+const MataPelajaran = mongoose.model('MataPelajaran', mataPelajaranSchema);
+
+module.exports = MataPelajaran;

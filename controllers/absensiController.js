@@ -1,58 +1,55 @@
 const Absensi = require('../models/absensiModels');
 
-exports.createAbsensi = async (req, res) => {
-    const { sisw, tanggal, statusKehadiran } = req.body;
-    try {
-        const newAbsensi = new Absensi({ siswa, tanggal, statusKehadiran});
-        const absensi = await newAbsensi.save();
-        res.status(201).json( absensi );
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
+// Get all absensi
 exports.getAllAbsensi = async (req, res) => {
     try {
-        const absensi = await Absensi.find().populate('siswa');
-        res.status(200).json( absensi );
+        const absensi = await Absensi.find().populate('id_siswa'); // Populate siswa details
+        res.status(200).json(absensi);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
+// Create a new absensi
+exports.createAbsensi = async (req, res) => {
+    const absensi = new Absensi(req.body);
+    try {
+        const newAbsensi = await absensi.save();
+        res.status(201).json(newAbsensi);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// Get absensi by ID
 exports.getAbsensiById = async (req, res) => {
     try {
-        const absensi = await Absensi.findById(req.params.id).populate('siswa');
-        if (!absensi) {
-            return res.status(404).json({ message: 'Absensi tidak ditemukan' });
-        }
-        res.status(200).json( absensi );
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
-
-exports.updateAbsensi = async (req, res) => {
-    const { siswa, tanggal, statusKehadiran } = req.body;
-    try {
-        const absensi = await Absensi.findByIdAndUpdate(req.params.id, { siswa, tanggal, statusKehadiran }, { new: true });
-        if (!absensi) {
-            return res.status(404).json({ msg: 'Absensi not found' });
-        }
+        const absensi = await Absensi.findById(req.params.id).populate('id_siswa');
+        if (!absensi) return res.status(404).json({ message: 'Absensi not found' });
         res.status(200).json(absensi);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };
 
+// Update absensi
+exports.updateAbsensi = async (req, res) => {
+    try {
+        const absensi = await Absensi.findByIdAndUpdate(req.params.id, req.body, { new: true }).populate('id_siswa');
+        if (!absensi) return res.status(404).json({ message: 'Absensi not found' });
+        res.status(200).json(absensi);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
+// Delete absensi
 exports.deleteAbsensi = async (req, res) => {
     try {
         const absensi = await Absensi.findByIdAndDelete(req.params.id);
-        if (!absensi) {
-            return res.status(404).json({ message: 'Absensi tidak ditemukan' });
-        }
-        res.status(200).json({ msg: 'Absensi telah dihapus' });
+        if (!absensi) return res.status(404).json({ message: 'Absensi not found' });
+        res.status(200).json({ message: 'Absensi deleted' });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };

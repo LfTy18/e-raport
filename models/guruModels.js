@@ -1,8 +1,13 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const GuruSchema = new mongoose.Schema ({
-    nama: { type: String, required: true},
-    nip: { type: String, required: true, unique: true}
+const guruSchema = new Schema({
+    nama_guru: { type: String, required: true },
+    nip: { type: String, required: true, unique: true },
+    tanggal_lahir: { type: Date, required: true },
+    alamat: { type: String }
 });
 
-module.exports = mongoose.model('Guru', GuruSchema);
+const Guru = mongoose.model('Guru', guruSchema);
+
+module.exports = Guru;

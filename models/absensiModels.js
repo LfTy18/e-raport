@@ -1,10 +1,16 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const AbsensiSchema = new mongoose.Schema({
-    siswa: { type: mongoose.Schema.Types.ObjectId, ref: 'Siswa' },
-    tanggal: { type: Date, required: true},
-    statuskehadiran: { type: Boolean, required: true}
+const absensiSchema = new Schema({
+    id_siswa: { type: Schema.Types.ObjectId, ref: 'Siswa', required: true }, // Reference to the Siswa collection
+    tanggal: { type: Date, required: true },
+    status: {
+        type: String,
+        enum: ['Hadir', 'Sakit', 'Izin', 'Alpha'],
+        required: true
+    }
 });
 
-module.exports = mongoose.model('Absensi', AbsensiSchema);
+const Absensi = mongoose.model('Absensi', absensiSchema);
 
+module.exports = Absensi;

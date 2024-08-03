@@ -1,14 +1,16 @@
 const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-const NilaiSchema = new mongoose.Schema({
-    siswa: { type: mongoose.Schema.Types.ObjectId, ref: 'Siswa' },
-    mapel: { type: mongoose.Schema.Types.ObjectId, ref: 'Mapel' },
-    kehadiran: Number,
-    tugas: Number,
-    ulanganHarian: Number,
-    uts: Number,
-    uas: Number,
-    totalNilai: Number
+const nilaiSchema = new Schema({
+    id_siswa: { type: Schema.Types.ObjectId, ref: 'Siswa', required: true }, // Reference to the Siswa collection
+    id_mata_pelajaran: { type: Schema.Types.ObjectId, ref: 'MataPelajaran', required: true }, // Reference to the MataPelajaran collection
+    absensi: { type: Number, required: true },
+    tugas: { type: Number, required: true },
+    ulangan_harian: { type: Number, required: true },
+    uts: { type: Number, required: true },
+    uas: { type: Number, required: true }
 });
 
-module.exports = mongoose.model('Nilai', NilaiSchema);
+const Nilai = mongoose.model('Nilai', nilaiSchema);
+
+module.exports = Nilai;

@@ -1,74 +1,55 @@
-    const Siswa = require('../models/siswaModels');
+const Siswa = require('../models/siswaModels');
 
-    exports.createSiswa = async (req, res) => {
-        const { no, nama, nis, kelasId } = req.body;
-        try {
-            const newSiswa = new Siswa({no, nama, nis, kelasId });
-            const siswa = await newSiswa.save();
-            res.status(201).json(siswa);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    };
+// Get all siswa
+exports.getAllSiswa = async (req, res) => {
+    try {
+        const siswa = await Siswa.find();
+        res.status(200).json(siswa);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
-    exports.getAllSiswa = async (req, res) => {
-        try {
-            const siswa = await Siswa.find().populate({
-                path: 'kelasId',
-                select: 'namaKelas' // Only include the namaKelas field
-            });
-            res.status(200).json(siswa);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    };
+// Create a new siswa
+exports.createSiswa = async (req, res) => {
+    const siswa = new Siswa(req.body);
+    try {
+        const newSiswa = await siswa.save();
+        res.status(201).json(newSiswa);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
 
-    exports.updateSiswa = async (req, res) => {
-        const { nama, nis } = req.body;
-        try {
-            const siswa = await Siswa.findByIdAndUpdate(req.params.id, { no, nama, nis, kelasId }, { new: true });
-            if (!siswa) {
-                return res.status(404).json({ message: "Siswa tidak ditemukan" });
-            }
-            res.status(200).json(siswa);
-        } catch (error) {
-            res.status(500).json({ message: error.message });
-        }
-    };
+// Get siswa by ID
+exports.getSiswaById = async (req, res) => {
+    try {
+        const siswa = await Siswa.findById(req.params.id);
+        if (!siswa) return res.status(404).json({ message: 'Siswa not found' });
+        res.status(200).json(siswa);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
+// Update siswa
+exports.updateSiswa = async (req, res) => {
+    try {
+        const siswa = await Siswa.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        if (!siswa) return res.status(404).json({ message: 'Siswa not found' });
+        res.status(200).json(siswa);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
 
-    exports.getSiswaById = async (req, res) => {
-        try {
-            const siswa = await Siswa.findByIdAndUpdate(req.params.id, { no, nama, nis, kelasId }, { new: true });
-            if (!siswa) {
-                return res.status(404).json({ error: 'Siswa tidak ditemukan' });
-            }
-            res.status(200).json(siswa);
-        } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-    };
-
-    exports.deleteSiswa = async (req, res) => {
-        try {
-            const siswa = await Siswa.findByIdAndDelete(req.params.id);
-            if (!siswa) {
-                return res.status(404).json({ error: 'Siswa tidak ditemukan' });
-            }
-            res.status(200).json({ message: 'Siswa berhasil dihapus' });
-        } catch(error) {
-            res.status(500).json({ error: error.message });
-        }
-    };
-
-    // exports.deleteSiswaById = async (req, res) => {
-    //     try {
-    //         const siswa = await Siswa.findbyIdAndDelete(req.params.id);
-    //         if (!siswa) {
-    //             return res.status(404).json({ error: 'Siswa tidak ditemukan' });
-    //         }
-    //         res.status(200).json({ message: 'Siswa berhasil dihapus' });
-    //     } catch(error) {
-    //         res.status(500).json({ error: error.message });
-    //     }
-    // }
+// Delete siswa
+exports.deleteSiswa = async (req, res) => {
+    try {
+        const siswa = await Siswa.findByIdAndDelete(req.params.id);
+        if (!siswa) return res.status(404).json({ message: 'Siswa not found' });
+        res.status(200).json({ message: 'Siswa deleted' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
