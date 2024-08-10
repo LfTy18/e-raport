@@ -59,144 +59,192 @@
     </div>
 
     <!-- Modal Form -->
-    <div class="modal fade" id="nilaiModal" tabindex="-1" aria-labelledby="nilaiModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="nilaiModalLabel">Tambah Nilai</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="nilaiForm">
-                        <input type="hidden" id="nilaiId">
-                        <div class="mb-3">
-                            <label for="siswa" class="form-label">Nama Siswa</label>
-                            <select class="form-control" id="siswa">
-                                <!-- Options will be loaded dynamically -->
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tugas" class="form-label">Tugas</label>
-                            <input type="number" class="form-control" id="tugas" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="ulanganHarian" class="form-label">Ulangan Harian</label>
-                            <input type="number" class="form-control" id="ulangan_harian" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="uts" class="form-label">UTS</label>
-                            <input type="number" class="form-control" id="uts" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="uas" class="form-label">UAS</label>
-                            <input type="number" class="form-control" id="uas" required>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="saveNilai()">Save</button>
-                </div>
+    <div class="container mt-4">
+        <h1>Nilai</h1>
+        <form id="nilaiForm">
+            <div class="mb-3">
+                <label for="nama_siswa" class="form-label">Nama Siswa</label>
+                <input type="text" class="form-control" id="nama_siswa" required>
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="pai" class="form-label">Pendidikan Agama Islam</label>
+                <input type="number" class="form-control" id="pai" required>
+            </div>
+            <div class="mb-3">
+                <label for="pp" class="form-label">Pendidikan Pancasila</label>
+                <input type="number" class="form-control" id="pp" required>
+            </div>
+            <div class="mb-3">
+                <label for="bi" class="form-label">Bahasa Indonesia</label>
+                <input type="text" class="form-control" id="bi" required>
+            </div>
+            <div class="mb-3">
+                <label for="mtk" class="form-label">Matematika</label>
+                <input type="text" class="form-control" id="mtk" required>
+            </div>
+            <div class="mb-3">
+                <label for="ipa" class="form-label">IPA</label>
+                <input type="number" class="form-control" id="ipa" required>
+            </div>
+            <div class="mb-3">
+                <label for="sbdp" class="form-label">SBdP</label>
+                <input type="number" class="form-control" id="sbdp" required>
+            </div>
+            <div class="mb-3">
+                <label for="pjok" class="form-label">PJOK</label>
+                <input type="number" class="form-control" id="pjok" required>
+            </div>
+        </form>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             fetchNilai();
+            fetchSiswa();
+            fetchMataPelajaran();
 
-            // Fetch options for Siswa select
-            fetch('http://localhost:3000/api/siswa')
-                .then(response => response.json())
-                .then(data => {
-                    const siswaSelect = document.getElementById('siswa');
-                    data.forEach(siswa => {
-                        const option = document.createElement('option');
-                        option.value = siswa._id;
-                        option.textContent = siswa.nama;
-                        siswaSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Error fetching siswa:', error));
+            document.getElementById('nilaiForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const id = document.getElementById('nilaiForm').dataset.id;
+                if (id) {
+                    updateNilai(id);
+                } else {
+                    createNilai();
+                }
+            });
+
+            document.getElementById('cancelEdit').addEventListener('click', function() {
+                resetForm();
+            });
         });
 
         function fetchNilai() {
-            fetch('http://localhost:3000/api/nilai')
+            fetch('http://localhost:3000/nilai')
                 .then(response => response.json())
                 .then(data => {
-                    const tbody = document.getElementById('nilaiTableBody');
-                    tbody.innerHTML = '';
+                    const nilaiTable = document.getElementById('nilaiTable').getElementsByTagName('tbody')[0];
+                    nilaiTable.innerHTML = '';
                     data.forEach(nilai => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${nilai._id}</td>
-                            <td>${nilai.siswa ? nilai.siswa.nama : ''}</td>
-                            <td>${nilai.tugas}</td>
-                            <td>${nilai.ulangan_harian}</td>
-                            <td>${nilai.uts}</td>
-                            <td>${nilai.uas}</td>
-                            <td>
-                                <button class="btn btn-warning btn-sm" onclick="showEditNilaiForm('${nilai._id}')">Edit</button>
-                                <button class="btn btn-danger btn-sm" onclick="deleteNilai('${nilai._id}')">Delete</button>
-                            </td>
+                        const row = nilaiTable.insertRow();
+                        row.insertCell(0).innerText = nilai._id;
+                        row.insertCell(1).innerText = nilai.siswa ? nilai.siswa.nama : 'Unknown';
+                        row.insertCell(2).innerText = nilai.mata_pelajaran ? nilai.mata_pelajaran.nama_pelajaran : 'Unknown';
+                        row.insertCell(3).innerText = nilai.nilai;
+                        row.insertCell(4).innerHTML = `
+                            <button class="btn btn-warning btn-sm" onclick="editNilai('${nilai._id}')">Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteNilai('${nilai._id}')">Delete</button>
                         `;
-                        tbody.appendChild(tr);
                     });
-                })
-                .catch(error => console.error('Error fetching nilai:', error));
+                });
         }
 
-        function showAddNilaiForm() {
-            document.getElementById('nilaiForm').reset();
-            document.getElementById('nilaiId').value = '';
-            new bootstrap.Modal(document.getElementById('nilaiModal')).show();
+        function fetchSiswa() {
+            fetch('http://localhost:3000/siswa')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('id_siswa');
+                    select.innerHTML = '<option value="">Pilih Siswa</option>';
+                    data.forEach(siswa => {
+                        const option = document.createElement('option');
+                        option.value = siswa._id;
+                        option.text = siswa.nama;
+                        select.appendChild(option);
+                    });
+                });
         }
 
-        function saveNilai() {
-            const id = document.getElementById('nilaiId').value;
-            const siswaId = document.getElementById('siswa').value;
-            const tugas = document.getElementById('tugas').value;
-            const ulanganHarian = document.getElementById('ulanganHarian').value;
-            const uts = document.getElementById('uts').value;
-            const uas = document.getElementById('uas').value;
+        function fetchMataPelajaran() {
+            fetch('http://localhost:3000/mata_pelajaran')
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('id_mata_pelajaran');
+                    select.innerHTML = '<option value="">Pilih Mata Pelajaran</option>';
+                    data.forEach(mata_pelajaran => {
+                        const option = document.createElement('option');
+                        option.value = mata_pelajaran._id;
+                        option.text = mata_pelajaran.nama_pelajaran;
+                        select.appendChild(option);
+                    });
+                });
+        }
 
-            const url = id ? `http://localhost:3000/api/nilai/${id}` : 'http://localhost:3000/api/nilai';
-            const method = id ? 'PUT' : 'POST';
+        function createNilai() {
+            const id_siswa = document.getElementById('id_siswa').value;
+            const id_mata_pelajaran = document.getElementById('id_mata_pelajaran').value;
+            const nilai = document.getElementById('nilai').value;
 
-            fetch(url, {
-                method: method,
+            const data = {
+                id_siswa,
+                id_mata_pelajaran,
+                nilai
+            };
+
+            fetch('http://localhost:3000/nilai', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ siswa: siswaId, tugas, ulanganHarian, uts, uas })
-            }).then(response => response.json())
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
             .then(() => {
                 fetchNilai();
-                new bootstrap.Modal(document.getElementById('nilaiModal')).hide();
-            }).catch(error => console.error('Error saving nilai:', error));
+                resetForm();
+            });
         }
 
-        function showEditNilaiForm(id) {
-            fetch(`http://localhost:3000/api/nilai/${id}`)
+        function editNilai(id) {
+            fetch(`http://localhost:3000/nilai/${id}`)
                 .then(response => response.json())
-                .then(nilai => {
-                    document.getElementById('nilaiId').value = nilai._id;
-                    document.getElementById('siswa').value = nilai.siswa ? nilai.siswa._id : '';
-                    document.getElementById('tugas').value = nilai.tugas;
-                    document.getElementById('ulanganHarian').value = nilai.ulanganHarian;
-                    document.getElementById('uts').value = nilai.uts;
-                    document.getElementById('uas').value = nilai.uas;
-                    new bootstrap.Modal(document.getElementById('nilaiModal')).show();
-                })
-                .catch(error => console.error('Error fetching nilai:', error));
+                .then(data => {
+                    document.getElementById('id_siswa').value = data.id_siswa || '';
+                    document.getElementById('id_mata_pelajaran').value = data.id_mata_pelajaran || '';
+                    document.getElementById('nilai').value = data.nilai;
+                    document.getElementById('nilaiForm').dataset.id = data._id;
+                    document.querySelector('button[type="submit"]').innerText = 'Update';
+                    document.getElementById('cancelEdit').style.display = 'inline-block';
+                });
+        }
+
+        function updateNilai(id) {
+            const id_siswa = document.getElementById('id_siswa').value;
+            const id_mata_pelajaran = document.getElementById('id_mata_pelajaran').value;
+            const nilai = document.getElementById('nilai').value;
+
+            const data = {
+                id_siswa,
+                id_mata_pelajaran,
+                nilai
+            };
+
+            fetch(`http://localhost:3000/nilai/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(() => {
+                fetchNilai();
+                resetForm();
+            });
         }
 
         function deleteNilai(id) {
-            if (confirm('Are you sure you want to delete this nilai?')) {
-                fetch(`http://localhost:3000/api/nilai/${id}`, { method: 'DELETE' })
-                    .then(() => fetchNilai())
-                    .catch(error => console.error('Error deleting nilai:', error));
-            }
+            fetch(`http://localhost:3000/nilai/${id}`, {
+                method: 'DELETE'
+            })
+            .then(() => {
+                fetchNilai();
+            });
+        }
+
+        function resetForm() {
+            document.getElementById('nilaiForm').reset();
+            delete document.getElementById('nilaiForm').dataset.id;
+            document.querySelector('button[type="submit"]').innerText = 'Submit';
+            document.getElementById('cancelEdit').style.display = 'none';
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-eMN8nDkcSgBpSBY8a65M/lmHepytW+6aN6/O66Ns8u5Q8Cp4XQ7ZXQ8ku+MeMM/g" crossorigin="anonymous"></script>
